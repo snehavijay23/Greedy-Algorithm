@@ -1,0 +1,64 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+class Point {
+    int x, y;
+
+    Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class ParetoStaircase {
+
+    public static List<Point> staircase(List<Point> points) {
+        List<Point> paretoOptimal = new ArrayList<>();
+        int maxY = Integer.MIN_VALUE;
+
+        for (Point p : points) {
+            if (p.y > maxY) {
+                paretoOptimal.add(p);
+                maxY = p.y;
+            }
+        }
+
+        return paretoOptimal;
+    }
+
+    public static List<Point> randomPoints(int n) {
+        List<Point> points = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 1; i <= n; i++) {
+            points.add(new Point(i, random.nextInt(10000) + 1)); // Random y-coordinates from 1 to 10000
+        }
+
+        return points;
+    }
+
+    public static void expTime() {
+        int[] nValues = {10, 100, 1000, 10000, 100000};  
+
+        for (int n : nValues) {
+            List<Point> points = randomPoints(n);
+            long startTime = System.nanoTime();
+            List<Point> paretoStaircase = staircase(points);
+            long endTime = System.nanoTime();
+            long timeTaken = endTime - startTime; // Time taken in nanoseconds
+
+            // Print results
+            System.out.println("Size: " + n + ", Execution Time: " + timeTaken + " ns");
+            System.out.print("Pareto-optimal points: ");
+            for (Point p : paretoStaircase) {
+                System.out.print("(" + p.x + ", " + p.y + ") ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        expTime();
+    }
+}
